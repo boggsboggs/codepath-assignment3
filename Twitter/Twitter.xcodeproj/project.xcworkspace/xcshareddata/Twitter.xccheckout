@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>EE52C96D-AFB5-4870-AD4D-E473F11A6487</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Twitter</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>B44DFEA05C05B95FCD808157085068CF0AE96971</key>
+		<string>github.com:upsidedowntophat/codepath-assignment4</string>
+		<key>F1535DDE552F8B353318771192F12F15A9D27CBD</key>
+		<string>github.com:upsidedowntophat/codepath-assignment3</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Twitter/Twitter.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>B44DFEA05C05B95FCD808157085068CF0AE96971</key>
+		<string>../../../../codepath-assignment4</string>
+		<key>F1535DDE552F8B353318771192F12F15A9D27CBD</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:upsidedowntophat/codepath-assignment3</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>F1535DDE552F8B353318771192F12F15A9D27CBD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F1535DDE552F8B353318771192F12F15A9D27CBD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>codepath-assignment3</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B44DFEA05C05B95FCD808157085068CF0AE96971</string>
+			<key>IDESourceControlWCCName</key>
+			<string>codepath-assignment4</string>
+		</dict>
+	</array>
+</dict>
+</plist>
