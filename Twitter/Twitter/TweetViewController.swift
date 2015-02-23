@@ -10,26 +10,63 @@ import UIKit
 
 class TweetViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    let REPLY_SEGUE = "ReplySegue"
+    
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var handleLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var tweetText: UITextView!
+    
+    @IBOutlet weak var retweetButton: UIButton!
 
-        // Do any additional setup after loading the view.
-    }
+    @IBOutlet weak var favoriteButton: UIButton!
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func retweetButtonPressed(sender: AnyObject) {
+        TwitterClient.instance.sendTweet(tweet!.text)
+        setRetweeted()
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func favoriteButtonPressed(sender: AnyObject) {
+        TwitterClient.instance.favoriteTweet(tweet!)
+        setFavorited()
     }
-    */
-
+    
+    var tweet : Tweet?
+    
+    func setFavorited() {
+        let favoritedImage = UIImage(named: "favorite_on.png")
+        favoriteButton.setBackgroundImage(favoritedImage, forState: UIControlState.Normal)
+        
+    }
+    
+    func setRetweeted() {
+        let retweetedImage = UIImage(named: "retweet_on.png")
+        retweetButton.setBackgroundImage(retweetedImage, forState: UIControlState.Normal)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        nameLabel.text = tweet!.name
+        tweetText.text = tweet!.text
+        
+        if tweet!.favorited {
+            setFavorited()
+        }
+        if tweet!.retweeted {
+            setRetweeted()
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if let identifier = segue.identifier {
+            if identifier == REPLY_SEGUE {
+                let navVC = segue.destinationViewController as UINavigationController
+                let composeVC = navVC.topViewController as ComposeViewController
+                composeVC.replyTweet = tweet
+            }
+        }
+    }
 }
