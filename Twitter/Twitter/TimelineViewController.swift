@@ -37,6 +37,8 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: "refreshData", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(self.refreshControl!)
+        
+        self.tableView.rowHeight = UITableViewAutomaticDimension
     }
     
     override func viewWillAppear(animated: Bool) {

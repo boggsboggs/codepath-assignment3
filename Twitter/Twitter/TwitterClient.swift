@@ -52,7 +52,7 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
                 "status": tweet,
         ]
         if let replyToTweet = replyToTweet {
-            let status = "\(tweet)\n@\(replyToTweet.handle)"
+            let status = "@\(replyToTweet.handle) \(tweet)"
             parameters = [
                 "status": status,
                 "in_reply_to_status_id": replyToTweet.id
@@ -90,16 +90,19 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
     }
     
     func oauthLogin() {
+        NSLog("oauthLogin")
         self.fetchRequestTokenWithPath(
             "oauth/request_token",
             method: "GET",
             callbackURL: NSURL(string: "codepathtwitter://oauth"),
             scope: nil,
             success: {(requestToken: BDBOAuthToken!) in
+                NSLog("oauthLogin success")
                 let authUrl = NSURL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token)")!
                 UIApplication.sharedApplication().openURL(authUrl)
             },
             failure: {(error: NSError!) in
+                NSLog("oauthLogin error")
                 self.loginCallback(nil, error)
             }
         )

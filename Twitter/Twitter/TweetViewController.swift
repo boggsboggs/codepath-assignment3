@@ -13,9 +13,6 @@ class TweetViewController: UIViewController {
     let REPLY_SEGUE = "ReplySegue"
     
     @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var handleLabel: UILabel!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var tweetText: UITextView!
     
     @IBOutlet weak var retweetButton: UIButton!
@@ -48,7 +45,6 @@ class TweetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        nameLabel.text = tweet!.name
         tweetText.text = tweet!.text
         
         if tweet!.favorited {

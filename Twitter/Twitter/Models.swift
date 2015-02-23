@@ -19,6 +19,17 @@ struct Tweet {
     var retweeted : Bool
     var createdAt : String
     
+    static func reformatTimestamp(apiTimestamp: String) -> String {
+        let apiFormatter = NSDateFormatter()
+        apiFormatter.dateFormat = "EEE MMM d HH:mm:ss Z yyyy"
+        let date = apiFormatter.dateFromString(apiTimestamp)
+
+        let uiFormatter = NSDateFormatter()
+        uiFormatter.dateStyle = .ShortStyle
+        uiFormatter.timeStyle = .ShortStyle
+        return uiFormatter.stringFromDate(date!)
+    }
+    
     static func fromJSON(tweetJson : NSDictionary) -> Tweet {
         return Tweet(
             id: tweetJson.valueForKeyPath("id_str")! as String,
@@ -28,7 +39,7 @@ struct Tweet {
             text: tweetJson.valueForKeyPath("text")! as String,
             favorited: tweetJson.valueForKeyPath("favorited")! as Bool,
             retweeted: tweetJson.valueForKeyPath("retweeted")! as Bool,
-            createdAt: tweetJson.valueForKeyPath("created_at")! as String
+            createdAt: Tweet.reformatTimestamp(tweetJson.valueForKeyPath("created_at")! as String)
         )
     }
 }

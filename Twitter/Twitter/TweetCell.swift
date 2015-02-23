@@ -9,34 +9,35 @@
 import UIKit
 
 class TweetCell: UITableViewCell {
+    // Vars
     var tweet : Tweet?
-    
     var delegate : TweetCellDelegate?
-    
     let REPLY_SEGUE = "replySegue"
     
-    
+    // Buttons
     @IBOutlet weak var retweetButton: UIButton!
-    
     @IBOutlet weak var favoriteButton: UIButton!
-    
     @IBAction func replyButtonPressed(sender: AnyObject) {
         delegate?.peformReplySegue(self)
     }
-    
     @IBAction func retweetButtonPressed(sender: AnyObject) {
         TwitterClient.instance.sendTweet(tweet!.text)
         setRetweeted()
     }
-    
-    
     @IBAction func favoriteButtonPressed(sender: AnyObject) {
         TwitterClient.instance.favoriteTweet(tweet!)
         self.setFavorited()
     }
     
+    // Outlets
     @IBOutlet weak var tweetText: UITextView!
     
+    @IBOutlet weak var handleLabel: UILabel!
+    
+    @IBOutlet weak var profileImageView: UIImageView!
+    
+    @IBOutlet weak var timestampLabel: UILabel!
+
     func setFavorited() {
         let favoritedImage = UIImage(named: "favorite_on.png")
         favoriteButton.setBackgroundImage(favoritedImage, forState: UIControlState.Normal)
@@ -53,6 +54,11 @@ class TweetCell: UITableViewCell {
     
     func initializeContent() {
         self.tweetText.text = tweet!.text
+        self.profileImageView.setImageWithURL(NSURL(string: tweet!.profileImage))
+        self.profileImageView.layer.cornerRadius = 5.0
+        self.profileImageView.layer.masksToBounds = true
+        self.handleLabel.text = "@\(tweet!.handle)"
+        self.timestampLabel.text = tweet!.createdAt
         if tweet!.favorited {
             setFavorited()
         }
