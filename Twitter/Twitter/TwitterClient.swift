@@ -27,6 +27,22 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         return Static.instance
     }
 
+    func getUser(screenName : String, callback : (User?, NSError?) -> ()) {
+        self.GET(
+            "https://api.twitter.com/1.1/users/show.json",
+            parameters: [
+                "screen_name": screenName
+            ],
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                let user = User.fromJSON(response as NSDictionary)
+                callback(user, nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                println("error: \(error)")
+            }
+        )
+    }
+    
     func getTweets(success : ([Tweet]?, NSError?) -> ()) {
         self.GET(
             "https://api.twitter.com/1.1/statuses/home_timeline.json",
@@ -123,8 +139,7 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
                     parameters: nil,
                     success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) in
                         println(response)
-                        let user = User(name: response["screen_name"]! as String)
-                        self.loginCallback(user, nil)
+                        self.loginCallback(nil, nil)
                     },
                     failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                         self.loginCallback(nil, error)

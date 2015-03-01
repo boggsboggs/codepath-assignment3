@@ -16,6 +16,7 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     let LOGIN_SEGUE = "LoginViewController"
     let DETAIL_SEGUE = "DetailViewController"
     let REPLY_SEGUE = "replySegue"
+    let PROFILE_SEGUE = "ProfileSegue"
 
     let defaults = NSUserDefaults.standardUserDefaults()
     
@@ -67,6 +68,11 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
                 let composeVC = navVC.topViewController as ComposeViewController
                 let tweetCell = sender as TweetCell
                 composeVC.replyTweet = tweetCell.tweet!
+            } else if identifier == PROFILE_SEGUE {
+                let profileVC = segue.destinationViewController as ProfileViewController
+                let gestureRecognizer = sender as UITapGestureRecognizer
+                let tweetCell = gestureRecognizer.view!.superview!.superview!.superview!.superview!.superview! as TweetCell
+                profileVC.fetchHandle = tweetCell.tweet?.handle
             }
         }
     }

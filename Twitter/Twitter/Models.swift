@@ -46,4 +46,22 @@ struct Tweet {
 
 struct User {
     var name: String
+    var handle: String
+    var profileImageUrl: NSURL
+    var backgroundImageUrl: NSURL
+    var tweetCount: Int
+    var followersCount: Int
+    var followingCount: Int
+
+    static func fromJSON(userJson : NSDictionary) -> User {
+        return User(
+            name: userJson["name"]! as String,
+            handle: userJson["screen_name"]! as String,
+            profileImageUrl: NSURL(string: userJson["profile_image_url"]! as String)!,
+            backgroundImageUrl: NSURL(string: userJson["profile_banner_url"]! as String)!,
+            tweetCount: userJson["statuses_count"]! as Int,
+            followersCount: userJson["followers_count"]! as Int,
+            followingCount: userJson["friends_count"]! as Int
+        )
+    }
 }
