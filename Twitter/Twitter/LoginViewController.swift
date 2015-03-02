@@ -17,11 +17,10 @@ class LoginViewController: UIViewController {
     
     @IBAction func loginButtonPressed(sender: AnyObject) {
         NSLog("Login Button Pressed")
-        TwitterClient.instance.loginCallback = { (user: User?, error : NSError?) in
+        TwitterClient.instance.loginCallback = { (error : NSError?) in
             if let error = error {
                 println("error: \(error)")
-            }
-            if let user = user {
+            } else {
                 NSLog("Success")
                 self.defaults.setBool(true, forKey: LOGGED_IN_KEY)
                 self.delegate?.dismissModal()

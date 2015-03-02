@@ -10,9 +10,9 @@ import UIKit
 
 
 
-class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, LoginViewControllerDelegate, TweetCellDelegate {
+class TimelineViewController: UIViewController, LoginViewControllerDelegate, TweetCellDelegate {
 
-    let TWEET_CELL_IDENTIFIER = "TweetCellIdentifier"
+//    let TWEET_CELL_IDENTIFIER = "TweetCellIdentifier"
     let LOGIN_SEGUE = "LoginViewController"
     let DETAIL_SEGUE = "DetailViewController"
     let REPLY_SEGUE = "replySegue"
@@ -21,9 +21,8 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     let defaults = NSUserDefaults.standardUserDefaults()
     
     @IBOutlet weak var tableView: UITableView!
-    var refreshControl : UIRefreshControl?
     
-    
+    var timelineTable : TimelineTable!
     var tweets : [Tweet] = []
     
     @IBAction func signOutPressed(sender: AnyObject) {
@@ -33,21 +32,18 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let timelineTable = TimelineTable()
-        tableView.delegate = self; tableView.dataSource = self
-        
-        self.refreshControl = UIRefreshControl()
-        self.refreshControl?.addTarget(self, action: "refreshData", forControlEvents: UIControlEvents.ValueChanged)
-        self.tableView.addSubview(self.refreshControl!)
-        
-        self.tableView.estimatedRowHeight = 80
-        self.tableView.rowHeight = UITableViewAutomaticDimension
-        
-        self.tableView.tableHeaderView = self.getHeaderView()
+        self.timelineTable = TimelineTable(
+            mode: "TimelineMode",
+            tableView: self.tableView,
+            viewController: self,
+            tweetCellDelegate: self
+        )
+        self.timelineTable.initialize()
+        tableView.delegate = timelineTable; tableView.dataSource = timelineTable
     }
     
     override func viewWillAppear(animated: Bool) {
-        self.refreshData()
+        self.timelineTable.refreshData()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -74,49 +70,9 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
                 composeVC.replyTweet = tweetCell.tweet!
             } else if identifier == PROFILE_SEGUE {
                 let profileVC = segue.destinationViewController as ProfileViewController
-                let gestureRecognizer = sender as UITapGestureRecognizer
-                let tweetCell = gestureRecognizer.view!.superview!.superview!.superview!.superview!.superview! as TweetCell
+                let tweetCell = sender as TweetCell
                 profileVC.fetchHandle = tweetCell.tweet?.handle
             }
-        }
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCellWithIdentifier(self.TWEET_CELL_IDENTIFIER) as TweetCell
-        cell.tweet = self.tweets[indexPath.row]
-        cell.initializeContent()
-        cell.delegate = self
-        return cell
-    }
-
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.tweets.count
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        NSLog("selected")
-        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        self.performSegueWithIdentifier(DETAIL_SEGUE, sender: self.tableView.cellForRowAtIndexPath(indexPath))
-    }
-
-    func getTweets(callback: ([Tweet]?, NSError?) -> ()) {
-        TwitterClient.instance.getTweets(callback)
-    }
-    
-    func getHeaderView() -> UIView? {
-        return nil
-    }
-    
-    func refreshData() {
-        self.getTweets { (tweets: [Tweet]?, error: NSError?) in
-            if let tweets = tweets {
-                self.tweets = tweets
-                self.tableView.reloadData()
-            }
-            if let error = error {
-                println("error: \(error)")
-            }
-            self.refreshControl?.endRefreshing()
         }
     }
     
@@ -126,5 +82,9 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
 
     func peformReplySegue(tweetCell: TweetCell) {
         self.performSegueWithIdentifier(REPLY_SEGUE, sender: tweetCell)
+    }
+    
+    func segueToProfile(tweetCell: TweetCell) {
+        self.performSegueWithIdentifier(PROFILE_SEGUE, sender: tweetCell)
     }
 }

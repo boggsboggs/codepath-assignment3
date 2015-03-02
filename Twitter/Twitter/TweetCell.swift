@@ -65,6 +65,10 @@ class TweetCell: UITableViewCell {
         if tweet!.retweeted {
             setRetweeted()
         }
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: "profileTapped")
+        self.profileImageView.addGestureRecognizer(tapGesture)
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -72,9 +76,14 @@ class TweetCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    func profileTapped() {
+        self.delegate?.segueToProfile(self)
+    }
 
 }
 
 protocol TweetCellDelegate {
     func peformReplySegue(tweetCell: TweetCell)
+    func segueToProfile(tweetCell: TweetCell)
 }

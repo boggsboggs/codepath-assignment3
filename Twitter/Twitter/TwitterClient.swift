@@ -12,8 +12,8 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
     let defaults = NSUserDefaults.standardUserDefaults()
     let LOGIN_URL_KEY = "LoginUrl"
     
-    var loginCallback = { ( user : User?, error : NSError?) in
-        NSLog("loginCallback called before being set.  User: \(user), Error: \(error)")
+    var loginCallback = { (error : NSError?) in
+        NSLog("loginCallback called before being set. Error: \(error)")
     }
     
     class var instance : TwitterClient {
@@ -165,7 +165,7 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
             },
             failure: {(error: NSError!) in
                 NSLog("oauthLogin error")
-                self.loginCallback(nil, error)
+                self.loginCallback(error)
             }
         )
     }
@@ -185,14 +185,14 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
                     parameters: nil,
                     success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) in
                         println(response)
-                        self.loginCallback(nil, nil)
+                        self.loginCallback(nil)
                     },
                     failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                        self.loginCallback(nil, error)
+                        self.loginCallback(error)
                 })
             },
             failure: { (error: NSError!) in
-                self.loginCallback(nil, error)
+                self.loginCallback(error)
             }
         )
     }
