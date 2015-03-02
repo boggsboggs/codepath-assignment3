@@ -33,13 +33,17 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let timelineTable = TimelineTable()
         tableView.delegate = self; tableView.dataSource = self
         
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: "refreshData", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(self.refreshControl!)
         
+        self.tableView.estimatedRowHeight = 80
         self.tableView.rowHeight = UITableViewAutomaticDimension
+        
+        self.tableView.tableHeaderView = self.getHeaderView()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -94,9 +98,17 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
         self.performSegueWithIdentifier(DETAIL_SEGUE, sender: self.tableView.cellForRowAtIndexPath(indexPath))
     }
+
+    func getTweets(callback: ([Tweet]?, NSError?) -> ()) {
+        TwitterClient.instance.getTweets(callback)
+    }
+    
+    func getHeaderView() -> UIView? {
+        return nil
+    }
     
     func refreshData() {
-        TwitterClient.instance.getTweets { (tweets: [Tweet]?, error: NSError?) in
+        self.getTweets { (tweets: [Tweet]?, error: NSError?) in
             if let tweets = tweets {
                 self.tweets = tweets
                 self.tableView.reloadData()

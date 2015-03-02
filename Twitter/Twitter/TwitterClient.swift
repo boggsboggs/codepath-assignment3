@@ -43,6 +43,20 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         )
     }
     
+    func getLoggedInUser(callback : (User?, NSError?) -> ()) {
+        self.GET(
+            "https://api.twitter.com/1.1/account/verify_credentials.json",
+            parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                let user = User.fromJSON(response as NSDictionary)
+                callback(user, nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                println("error: \(error)")
+            }
+        )
+    }
+    
     func getTweets(success : ([Tweet]?, NSError?) -> ()) {
         self.GET(
             "https://api.twitter.com/1.1/statuses/home_timeline.json",
@@ -56,6 +70,38 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 println("error fetching tweets: \(error)")
             })
+    }
+    
+    func getUserTweets(handle : String, success : ([Tweet]?, NSError?) -> ()) {
+        self.GET(
+            "https://api.twitter.com/1.1/statuses/user_timeline.json",
+            parameters: [
+                "screen_name": handle,
+            ],
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                let tweets = (response! as Array).map({ (tweetJson) in
+                    Tweet.fromJSON(tweetJson as NSDictionary)
+                })
+                success(tweets, nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                println("error fetching tweets: \(error)")
+        })
+    }
+
+    func getMentions(success : ([Tweet]?, NSError?) -> ()) {
+        self.GET(
+            "https://api.twitter.com/1.1/statuses/mentions_timeline.json",
+            parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                let tweets = (response! as Array).map({ (tweetJson) in
+                    Tweet.fromJSON(tweetJson as NSDictionary)
+                })
+                success(tweets, nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                println("error fetching tweets: \(error)")
+        })
     }
 
     func sendTweet(tweet : String) {
