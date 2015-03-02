@@ -2,7 +2,7 @@
 
 This is some additional features added to the Twitter app from last week's assignment.
 
-Time spent: `16hrs`
+Time spent: `10hrs + 16hrs last week = 26hrs`
 
 ### Features
 
@@ -21,6 +21,9 @@ Time spent: `16hrs`
 #### Home Timeline
 - [X] Tapping on a user image should bring up that user's profile page
 
+### Walkthrough
+
+![Video Walkthrough](Twitter/TwitterRedux.gif)
 
 ## Twitter
 
